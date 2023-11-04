@@ -1,0 +1,140 @@
+// c code
+
+
+#include <stdio.h>
+#include <math.h>
+#define irate 0.053
+int main() {
+    float pa, ra, i, re, ir;
+    int choice;
+    char amountType;
+
+    // Get input from user
+    printf("****************************************************\n");
+    printf("*                                                  *\n");
+    printf("*               Retirement Planning Calculator      *\n");
+    printf("*                     - Stanley -                   *\n");
+    printf("*                                                  *\n");
+    printf("****************************************************\n\n");
+
+    printf("Enter your present age: ");
+    scanf("%f", &pa);
+    printf("Enter your desired retirement age: ");
+    scanf("%f", &ra);
+
+    printf("Enter your expected annual income (in thousands (K), lakhs (L), or crores (C)): ");
+    scanf(" %c", &amountType);
+    printf("Enter the amount: ");
+    scanf("%f", &i);
+
+    switch (amountType) {
+        case 'K':
+        case 'k':
+            i *= 1000;
+            break;
+        case 'L':
+        case 'l':
+            i *= 100000;
+            break;
+        case 'C':
+        case 'c':
+            i *= 10000000;
+            break;
+        default:
+            printf("Invalid amount type. Assuming the amount is in thousands.\n");
+            i *= 1000;
+            break;
+    }
+
+    printf("Enter your desired retirement expenses (in thousands (K), lakhs (L), or crores (C)): ");
+    scanf(" %c", &amountType);
+    printf("Enter the amount: ");
+    scanf("%f", &re);
+
+    switch (amountType) {
+        case 'K':
+        case 'k':
+            re *= 1000;
+            break;
+        case 'L':
+        case 'l':
+            re *= 100000;
+            break;
+        case 'C':
+        case 'c':
+            re *= 10000000;
+            break;
+        default:
+            printf("Invalid amount type. Assuming the amount is in thousands.\n");
+            re *= 1000;
+            break;
+    }
+
+    printf("Enter the expected interest rate: ");
+    scanf("%f", &ir);
+
+    // Calculate the number of years till retirement
+    int yr = ra - pa;
+
+    // Calculate the total income till retirement age
+    float totincome = yr * i;
+
+    // Calculate the annual savings required
+    float as = (totincome - re) / yr;
+
+    // Calculate the total investment required
+    float ti = as * yr;
+
+    // Calculate the future value of the investment considering interest rate
+    float a = ti * pow((1 + ir / 100), yr);
+
+    // Adjust the future value for inflation rate
+    float fv = a / pow((1 + irate), yr);
+
+    // Display the results and provide advice
+    printf("\nBased on your inputs, here is our advice:\n");
+    printf("1. Total income till retirement age: Rs%.2f\n", totincome);
+    printf("2. Annual savings required: Rs%.2f\n", as);
+    printf("3. Total investment required: Rs%.2f\n", ti);
+    printf("4. Future value of the investment adjusted for inflation: Rs%.2f\n", fv);
+
+    // Provide additional options and advice
+    printf("\nAdditional Options:\n");
+    printf("1. Calculate future value of investment for different interest rates\n");
+    printf("2. Calculate future value of investment for different retirement ages\n");
+    printf("3. Exit\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            // Calculate future value for different interest rates
+            printf("\nEnter the interest rate: ");
+            scanf("%f", &ir);
+            a = ti * pow((1 + ir / 100), yr);
+            fv = a / pow((1 + irate), yr);
+            printf("\nFuture value of the investment adjusted for inflation with an interest rate of %.2f%%: Rs%.2f\n", ir, fv);
+            break;
+        case 2:
+            // Calculate future value for different retirement ages
+            printf("\nEnter the desired retirement age: ");
+            scanf("%f", &ra);
+            yr = ra - pa;
+            totincome = yr * i;
+            as = (totincome - re) / yr;
+            ti = as * yr;
+            a = ti * pow((1 + ir / 100), yr);
+            fv = a / pow((1 + irate), yr);
+            printf("\nFuture value of the investment adjusted for inflation with a retirement age of %.0f: Rs%.2f\n", ra, fv);
+            break;
+        case 3:
+            // Exit the program
+            printf("\nThank you for using our retirement planning tool!\n");
+            break;
+        default:
+            printf("\nInvalid choice. Please try again.\n");
+            break;
+    }
+
+    return 0;
+}
